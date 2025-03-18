@@ -9,6 +9,8 @@ class King(Piece):
     def __init__(self, coordinates: tuple, player: int) -> None:
         """King piece class"""
         super().__init__(coordinates, player)
+
+        self.__first_move = True
     
     def _possible_moveset(self, chess_table):
         moves = list()
@@ -31,7 +33,7 @@ class King(Piece):
 
         for direction in directions:
             move = self.get_coordinates() + direction
-            
+
             if (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
                 __add_move(move, condition)
     

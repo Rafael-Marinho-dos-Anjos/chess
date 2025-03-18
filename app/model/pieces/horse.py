@@ -1,13 +1,13 @@
-"""Queen piece class module
+"""Horse piece class module
 """
 import numpy as np
 
 from app.model.pieces.piece import Piece
 
 
-class Queen(Piece):
+class Horse(Piece):
     def __init__(self, coordinates: tuple, player: int) -> None:
-        """Queen piece class"""
+        """Horse piece class"""
         super().__init__(coordinates, player)
     
     def _possible_moveset(self, chess_table):
@@ -19,28 +19,21 @@ class Queen(Piece):
         
         condition = lambda x: chess_table[x[0], x[1]] in (0, 2)
         directions = [
-            (-1, 0), # Forward
-            (1, 0), # Backward
-            (0, 1), # Right
-            (0, -1), # Left
-            (-1, 1), # Forward right
-            (-1, -1), # Forward left
-            (1, 1), # Backward right
-            (1, -1) # Backward left
+            (1, 2),
+            (1, -2),
+            (-1, 2),
+            (-1, -2),
+            (2, 1),
+            (2, -1),
+            (-2, 1),
+            (-2, -1)
         ]
 
         for direction in directions:
             move = self.get_coordinates() + direction
-            while (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
-                if chess_table[move[0], move[1]] == 1:
-                    break
-
+            
+            if (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
                 __add_move(move, condition)
-
-                if chess_table[move[0], move[1]] == 2:
-                    break
-
-                move = move + direction
     
     def move(self, dest: tuple):
         """

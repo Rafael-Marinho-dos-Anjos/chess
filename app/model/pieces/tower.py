@@ -1,13 +1,13 @@
-"""Queen piece class module
+"""Tower piece class module
 """
 import numpy as np
 
 from app.model.pieces.piece import Piece
 
 
-class Queen(Piece):
+class Tower(Piece):
     def __init__(self, coordinates: tuple, player: int) -> None:
-        """Queen piece class"""
+        """Tower piece class"""
         super().__init__(coordinates, player)
     
     def _possible_moveset(self, chess_table):
@@ -22,11 +22,7 @@ class Queen(Piece):
             (-1, 0), # Forward
             (1, 0), # Backward
             (0, 1), # Right
-            (0, -1), # Left
-            (-1, 1), # Forward right
-            (-1, -1), # Forward left
-            (1, 1), # Backward right
-            (1, -1) # Backward left
+            (0, -1) # Left
         ]
 
         for direction in directions:

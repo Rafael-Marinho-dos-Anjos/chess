@@ -27,10 +27,8 @@ class Bishop(Piece):
         ]
 
         for direction in directions:
-            move = self.get_coordinates()
+            move = self.get_coordinates() + direction
             while (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
-                move = move + direction
-
                 if chess_table[move[0], move[1]] == 1:
                     break
 
@@ -38,6 +36,8 @@ class Bishop(Piece):
 
                 if chess_table[move[0], move[1]] == 2:
                     break
+
+                move = move + direction
     
     def move(self, dest: tuple):
         """
