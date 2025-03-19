@@ -82,7 +82,7 @@ class ChessTable:
                 to: Desired coordinate.
                 player: An int number indicating the player (0 or 1).
 
-            return: None
+            return: An Piece object if it's captured else None.
         """
         chosen = None
         for i in range(2):
@@ -105,3 +105,22 @@ class ChessTable:
         
         table = self.get_friends_n_enemies(player=i)
         chosen.move(to, table)
+
+        captured = None
+        for i in range(2):
+            if i != player:
+                continue
+
+            for piece in self.__pieces:
+                if not piece.isalive():
+                    continue
+
+                if np.sum(piece.get_coordinates(i == 1)) == 2:
+                    captured = piece
+                    break
+            
+            if captured is not None:
+                captured.got_captured()
+                break
+
+        return captured

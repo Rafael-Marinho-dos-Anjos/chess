@@ -33,6 +33,9 @@ class Piece:
             return: A numpy ndarray with the current coordinate of the piece.
         """
         return self.__coordinates if not turned else np.array([7, 7], dtype=int) - self.__coordinates
+    
+    def got_captured(self):
+        self.__isalive = False
 
     def _possible_moveset(self, chess_table: np.ndarray) -> np.ndarray:
         """
