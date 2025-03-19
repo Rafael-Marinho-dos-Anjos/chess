@@ -38,7 +38,7 @@ class Tower(Piece):
 
                 move = move + direction
     
-    def move(self, dest: tuple):
+    def move(self, dest: tuple, chess_table: np.ndarray):
         """
             Verifies if the destination is a valid movement and
             moves this piece to it if possible.
@@ -48,5 +48,5 @@ class Tower(Piece):
 
             return: None.
         """
-        super()._move(dest)
+        super()._move(dest, chess_table)
         self.__first_move = False

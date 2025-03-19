@@ -15,6 +15,9 @@ class Piece:
         self.__coordinates = np.array(coordinates, dtype=int)
         self.__isalive = True
 
+        if player == 1:
+            self.__coordinates = self.get_coordinates(turned=True)
+
     def isalive(self) -> bool:
         """Checks if this piece is still in the game."""
         return self.__isalive
@@ -45,8 +48,8 @@ class Piece:
         # Implement this in the subclasses
         pass
     
-    def _move(self, dest: np.ndarray) -> None:
-        if 2 not in np.sum(self._possible_moveset == dest, axis=1):
+    def _move(self, dest: np.ndarray, chess_table: np.ndarray) -> None:
+        if 2 not in np.sum(self._possible_moveset(chess_table) == dest, axis=1):
             raise ImpossibleMoveException(f"Cannot move this piece to pos {[dest[0], dest[1]]}.")
 
         if not isinstance(dest, np.ndarray):

@@ -10,3 +10,8 @@ class ImpossibleMoveException(Exception):
 class InvalidPlayerException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
+
+
+class NoPieceAtLocationException(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)

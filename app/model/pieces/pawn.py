@@ -40,7 +40,7 @@ class Pawn(Piece):
 
         return np.array(moves, dtype=int)
     
-    def move(self, dest: tuple):
+    def move(self, dest: tuple, chess_table: np.ndarray):
         """
             Verifies if the destination is a valid movement and
             moves this piece to it if possible.
@@ -50,5 +50,5 @@ class Pawn(Piece):
 
             return: None.
         """
-        super()._move(dest)
+        super()._move(dest, chess_table)
         self.__first_move = False

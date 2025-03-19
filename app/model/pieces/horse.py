@@ -35,7 +35,7 @@ class Horse(Piece):
             if (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
                 __add_move(move, condition)
     
-    def move(self, dest: tuple):
+    def move(self, dest: tuple, chess_table: np.ndarray):
         """
             Verifies if the destination is a valid movement and
             moves this piece to it if possible.
@@ -45,5 +45,5 @@ class Horse(Piece):
 
             return: None.
         """
-        super()._move(dest)
+        super()._move(dest, chess_table)
         self.__first_move = False
