@@ -5,7 +5,7 @@ from numpy import ndarray
 
 from app.model.chess_table import ChessTable
 from app.model.pieces.piece import Piece
-from app.view.board_view import draw_board, draw_moves, get_square
+from app.view.board_view import draw_board, draw_moves, draw_warning, get_square
 
 
 class Game:
@@ -17,6 +17,7 @@ class Game:
         self.__table = ChessTable()
         self.__turn = 0
         self.__selected = None
+        self.__under_xeque = False
     
     def show(self, wait: int = 0) -> None:
         """
@@ -27,9 +28,6 @@ class Game:
         cv2.imshow("Chess", self.__draw_frame())
         cv2.waitKey(wait)
         
-    # def show(self) -> None:
-        
-
     def __callback(self, *args) -> None:
         # TODO -> Callback function
         action = args[0]
@@ -61,6 +59,8 @@ class Game:
         board = draw_board(self.__table, player == 1)
         if self.__selected:
             board = draw_moves(self.__table, board, self.__selected, player == 1)
+        if self.__under_xeque:
+            board = draw_warning(self.__table, board, self.__turn % 2)
 
         return board
 
@@ -69,6 +69,8 @@ class Game:
             self.__table.move(self.__selected.get_coordinates(), loc, self.__turn % 2)
             self.show(250)
             self.__turn += 1
-            
+
+            self.__under_xeque = self.__table.is_under_xeque(self.__turn % 2)
+
         except Exception as e:
             print(e)

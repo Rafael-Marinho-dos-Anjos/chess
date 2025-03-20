@@ -15,3 +15,8 @@ class InvalidPlayerException(Exception):
 class NoPieceAtLocationException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
+
+
+class UnderXequeException(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)

@@ -19,6 +19,7 @@ ODD_SQUARE_COLOR = (99, 199, 77)
 SQUARE_DIVISOR_COLOR = (51, 115, 60)
 SELECTED_COLOR = (49, 252, 255)
 POSSIBLE_MOVE_COLOR = (45, 173, 255)
+WARNING_COLOR = (0, 50, 255)
 
 TABLE_BASE = np.ones(TABLE_SIZE + [3], dtype=np.uint8)
 TABLE_BASE[:, :] = SQUARE_DIVISOR_COLOR
@@ -110,3 +111,15 @@ def get_square(loc) -> tuple:
 
             if loc[0] >= init[0] and loc[1] >= init[1] and loc[0] <= end[0] and loc[1] <= end[1]:
                 return i, j
+
+def draw_warning(table: ChessTable, board: np.ndarray, player: int) -> np.ndarray:
+    piece_coordinates = table.get_king_loc(player)
+    init = [(SPRITE_DIM[d] + 2 * SQUARE_PADDING + SQUARE_DIVISOR) * k for d, k in enumerate(piece_coordinates)]
+    end = [(SPRITE_DIM[d] + 2 * SQUARE_PADDING) * (k + 1) + SQUARE_DIVISOR * k for d, k in enumerate(piece_coordinates)]
+
+    board[init[0]: end[0], init[1]: init[1] + SQUARE_SELECTION_THICKNESS] = WARNING_COLOR
+    board[init[0]: end[0], end[1] - SQUARE_SELECTION_THICKNESS: end[1]] = WARNING_COLOR
+    board[init[0]: init[0] + SQUARE_SELECTION_THICKNESS, init[1]: end[1]] = WARNING_COLOR
+    board[end[0] - SQUARE_SELECTION_THICKNESS: end[0], init[1]: end[1]] = WARNING_COLOR
+
+    return board

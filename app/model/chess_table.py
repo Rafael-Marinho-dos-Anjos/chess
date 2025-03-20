@@ -101,6 +101,7 @@ class ChessTable:
         if chosen is None:
             raise NoPieceAtLocationException("Any piece at given location.")
         
+        reroll = deepcopy(self.__pieces)
         table = self.get_friends_n_enemies(player=i)
         special_play = chosen.move(to, table)
 
@@ -133,6 +134,10 @@ class ChessTable:
             if captured is not None:
                 captured.got_captured()
                 break
+        
+        if self.is_under_xeque(player):
+            self.__pieces = reroll
+            raise UnderXequeException("This movement puts you under xeque.")
 
         return captured
 
@@ -154,3 +159,19 @@ class ChessTable:
 
                 if np.sum(piece.get_coordinates(i == turn_player) == coordinates) == 2:
                     return piece
+
+    def get_king_loc(self, player: int) -> tuple:
+        for piece in self.__pieces[player]:
+            if isinstance(piece, King):
+                return piece.get_coordinates()
+            
+    def is_under_xeque(self, player: int) -> bool:
+        king_loc = np.array((7, 7), dtype=int) - self.get_king_loc(player)
+        for piece in self.__pieces[(player + 1) % 2]:
+            moves = piece.possible_moveset(self.get_friends_n_enemies((player + 1) % 2))
+            if len(moves) == 0:
+                continue
+            if 2 in np.sum(moves == king_loc, axis=1):
+                return True
+            
+        return False
