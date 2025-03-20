@@ -9,6 +9,7 @@ from app.model.pieces.horse import Horse
 from app.model.pieces.king import King
 from app.model.pieces.queen import Queen
 from app.utils.exceptions import *
+from app.utils.special_plays import SpecialPlays
 
 
 class ChessTable:
@@ -64,7 +65,7 @@ class ChessTable:
                 if not piece.isalive():
                     continue
 
-                loc = piece.get_coordinates(inverted)
+                loc = piece.get_coordinates(player_num == 2)
                 table[loc[0], loc[1]] = player_num
 
         return table
@@ -86,14 +87,14 @@ class ChessTable:
         """
         chosen = None
         for i in range(2):
-            if i == player:
+            if i != player:
                 continue
 
-            for piece in self.__pieces:
+            for j, piece in enumerate(self.__pieces):
                 if not piece.isalive():
                     continue
 
-                if np.sum(piece.get_coordinates(i == 1)) == 2:
+                if np.sum(piece.get_coordinates(i != player) == _from) == 2:
                     chosen = piece
                     break
             
@@ -104,18 +105,31 @@ class ChessTable:
             raise NoPieceAtLocationException("Any piece at given location.")
         
         table = self.get_friends_n_enemies(player=i)
-        chosen.move(to, table)
+        special_play = chosen.move(to, table)
+
+        if special_play is None:
+            pass
+
+        elif special_play == SpecialPlays.EN_PASSANT:
+            to[0] = to[0] + 1
+
+        elif special_play == SpecialPlays.END_OF_BOARD:
+            self.__pieces[i][j] = Queen(coordinates=to, player=i)
+            
+        elif special_play == SpecialPlays.ROCK:
+            # TODO -> Rock implementation
+            pass
 
         captured = None
         for i in range(2):
-            if i != player:
+            if i == player:
                 continue
 
             for piece in self.__pieces:
                 if not piece.isalive():
                     continue
 
-                if np.sum(piece.get_coordinates(i == 1)) == 2:
+                if np.sum(piece.get_coordinates(i != player) == to) == 2:
                     captured = piece
                     break
             

@@ -3,6 +3,7 @@
 import numpy as np
 
 from app.model.pieces.piece import Piece
+from app.utils.special_plays import SpecialPlays
 
 
 class Pawn(Piece):
@@ -51,5 +52,15 @@ class Pawn(Piece):
 
             return: None.
         """
+        init = self.get_coordinates()
+
         super()._move(dest, chess_table)
         self.__first_move = False
+
+        if abs(init[1] - dest[1]) == 1 and\
+            chess_table[dest[0], dest[1]] == 0 and\
+            chess_table[dest[0] + 1, dest[1]] == 2:
+            return SpecialPlays.EN_PASSANT
+            
+        if dest[0] == 0:
+            return SpecialPlays.END_OF_BOARD
