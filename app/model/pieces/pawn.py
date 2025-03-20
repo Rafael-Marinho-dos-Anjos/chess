@@ -19,13 +19,14 @@ class Pawn(Piece):
             if cond(loc):
                 moves.append(loc)
         
-        if self.__first_move: # Bypass
+        if self.__first_move and self.get_coordinates()[0] == 4: # En passant
             condition = lambda x: chess_table[x[0], x[1]] == 0 and\
-                        (chess_table[x[0], x[1] + 1] == 2 or\
-                        chess_table[x[0], x[1] - 1] == 2)
-            move = self.get_coordinates() + (-2, 0)
+                        chess_table[x[0] + 1, x[1]] == 2
+            move = self.get_coordinates() + (-1, -1)
             __add_move(move, condition)
-        
+            move = self.get_coordinates() + (-1, 1)
+            __add_move(move, condition)
+
         # Forward move
         condition = lambda x: chess_table[x[0], x[1]] == 0
         move = self.get_coordinates() + (-1, 0)
