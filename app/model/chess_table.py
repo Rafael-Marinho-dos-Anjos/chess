@@ -1,13 +1,10 @@
 """Chess Table class module
 """
+from copy import deepcopy
+
 import numpy as np
 
-from app.model.pieces.pawn import Pawn
-from app.model.pieces.bishop import Bishop
-from app.model.pieces.tower import Tower
-from app.model.pieces.horse import Horse
-from app.model.pieces.king import King
-from app.model.pieces.queen import Queen
+from app.model.pieces import *
 from app.utils.exceptions import *
 from app.utils.special_plays import SpecialPlays
 
@@ -71,8 +68,7 @@ class ChessTable:
         return table
     
     def get_table(self):
-        # TODO -> Returns a matrix with all pieces information
-        pass
+        return deepcopy(self.__pieces)
 
     def move(self, _from: tuple, to: tuple, player: int) -> None:
         """
@@ -115,7 +111,7 @@ class ChessTable:
 
         elif special_play == SpecialPlays.END_OF_BOARD:
             self.__pieces[i][j] = Queen(coordinates=to, player=i)
-            
+
         elif special_play == SpecialPlays.ROCK:
             # TODO -> Rock implementation
             pass

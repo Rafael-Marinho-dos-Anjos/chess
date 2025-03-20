@@ -15,9 +15,6 @@ class Piece:
         self.__coordinates = np.array(coordinates, dtype=int)
         self.__isalive = True
 
-        if player == 1:
-            self.__coordinates = self.get_coordinates(turned=True)
-
     def isalive(self) -> bool:
         """Checks if this piece is still in the game."""
         return self.__isalive
@@ -59,3 +56,6 @@ class Piece:
             np.array(dest, dtype=int)
 
         self.__coordinates = dest
+
+    def get_player(self) -> int:
+        return self.__player
