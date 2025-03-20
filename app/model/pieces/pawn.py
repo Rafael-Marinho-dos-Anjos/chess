@@ -26,7 +26,7 @@ class Pawn(Piece):
             move = self.get_coordinates() + (-2, 0)
             __add_move(move, condition)
         
-        if self.get_coordinates()[0] == 4: # En passant
+        if self.get_coordinates()[0] == 3: # En passant
             condition = lambda x: x[1] >= 0 and x[1] <= 7 and\
                         chess_table[x[0], x[1]] == 0 and\
                         chess_table[x[0] + 1, x[1]] == 2                        

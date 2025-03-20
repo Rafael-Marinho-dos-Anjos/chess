@@ -108,7 +108,7 @@ class ChessTable:
             pass
 
         elif special_play == SpecialPlays.EN_PASSANT:
-            to[0] = to[0] + 1
+            to = (to[0] + 1, to[1])
 
         elif special_play == SpecialPlays.END_OF_BOARD:
             self.__pieces[i][j] = Queen(coordinates=to, player=i)

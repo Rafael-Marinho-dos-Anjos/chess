@@ -13,11 +13,15 @@ class Game:
         self.new_game()
     
     def new_game(self) -> None:
+        """Start a new game."""
         self.__table = ChessTable()
         self.__turn = 0
         self.__selected = None
     
     def show(self, wait: int = 0) -> None:
+        """
+            Shows a window filled with the game frame.
+        """
         self.__window = cv2.namedWindow("Chess", cv2.WINDOW_KEEPRATIO)
         cv2.setMouseCallback("Chess", self.__callback)
         cv2.imshow("Chess", self.__draw_frame())
@@ -65,5 +69,6 @@ class Game:
             self.__table.move(self.__selected.get_coordinates(), loc, self.__turn % 2)
             self.show(250)
             self.__turn += 1
+            
         except Exception as e:
             print(e)
