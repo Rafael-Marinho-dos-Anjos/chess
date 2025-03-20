@@ -38,7 +38,7 @@ class Game:
                 self.__selected = None
             else:
                 selected = self.__table.get_piece_by_loc(loc, self.__turn % 2 == 1)
-                if selected:
+                if selected and selected.get_player() == self.__turn % 2:
                     self.__selected = selected
                 else:
                     self.__selected = loc
