@@ -168,6 +168,8 @@ class ChessTable:
     def is_under_xeque(self, player: int) -> bool:
         king_loc = np.array((7, 7), dtype=int) - self.get_king_loc(player)
         for piece in self.__pieces[(player + 1) % 2]:
+            if not piece.isalive():
+                continue
             moves = piece.possible_moveset(self.get_friends_n_enemies((player + 1) % 2))
             if len(moves) == 0:
                 continue
