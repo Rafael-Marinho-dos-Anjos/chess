@@ -10,7 +10,7 @@ class Horse(Piece):
         """Horse piece class"""
         super().__init__(coordinates, player)
     
-    def _possible_moveset(self, chess_table):
+    def possible_moveset(self, chess_table):
         moves = list()
 
         def __add_move(loc: tuple, cond: any):
@@ -34,6 +34,8 @@ class Horse(Piece):
             
             if (move[0] >= 0 and move[0] <= 7 and move[1] >= 0 and move[1] <= 7):
                 __add_move(move, condition)
+
+        return np.array(moves, dtype=int)
     
     def move(self, dest: tuple, chess_table: np.ndarray):
         """

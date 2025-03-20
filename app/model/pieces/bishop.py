@@ -10,7 +10,7 @@ class Bishop(Piece):
         """Bishop piece class"""
         super().__init__(coordinates, player)
     
-    def _possible_moveset(self, chess_table):
+    def possible_moveset(self, chess_table):
         moves = list()
 
         def __add_move(loc: tuple, cond: any):
@@ -38,6 +38,8 @@ class Bishop(Piece):
                     break
 
                 move = move + direction
+
+        return np.array(moves, dtype=int)
     
     def move(self, dest: tuple, chess_table: np.ndarray):
         """

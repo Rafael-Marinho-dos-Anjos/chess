@@ -5,6 +5,7 @@ from copy import deepcopy
 import numpy as np
 
 from app.model.pieces import *
+from app.model.pieces.piece import Piece
 from app.utils.exceptions import *
 from app.utils.special_plays import SpecialPlays
 
@@ -56,7 +57,7 @@ class ChessTable:
             player_num = 1 if i == 0 else 2
 
             if inverted:
-                player_num = (2 * player) % 3
+                player_num = (2 * player_num) % 3
             
             for piece in self.__pieces[i]:
                 if not piece.isalive():
@@ -86,7 +87,7 @@ class ChessTable:
             if i != player:
                 continue
 
-            for j, piece in enumerate(self.__pieces):
+            for j, piece in enumerate(self.__pieces[i]):
                 if not piece.isalive():
                     continue
 
@@ -121,7 +122,7 @@ class ChessTable:
             if i == player:
                 continue
 
-            for piece in self.__pieces:
+            for piece in self.__pieces[i]:
                 if not piece.isalive():
                     continue
 
@@ -134,3 +135,22 @@ class ChessTable:
                 break
 
         return captured
+
+    def get_piece_by_loc(self, coordinates: tuple, turned: bool = False) -> Piece:
+        """
+            Gets the piece located at given coordinates.
+
+            params:
+                coordinates: Location to look.
+                turned: If the table is turned (second player look).
+
+            return: A Piece object.
+        """
+        turn_player = 0 if turned else 1
+        for i in range(2):
+            for piece in self.__pieces[i]:
+                if not piece.isalive():
+                    continue
+
+                if np.sum(piece.get_coordinates(i == turn_player) == coordinates) == 2:
+                    return piece

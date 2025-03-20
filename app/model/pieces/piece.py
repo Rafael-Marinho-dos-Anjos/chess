@@ -34,7 +34,7 @@ class Piece:
     def got_captured(self):
         self.__isalive = False
 
-    def _possible_moveset(self, chess_table: np.ndarray) -> np.ndarray:
+    def possible_moveset(self, chess_table: np.ndarray) -> np.ndarray:
         """
             Calculates all possible moves for this piece.
 
@@ -49,11 +49,11 @@ class Piece:
         pass
     
     def _move(self, dest: np.ndarray, chess_table: np.ndarray) -> None:
-        if 2 not in np.sum(self._possible_moveset(chess_table) == dest, axis=1):
+        if 2 not in np.sum(self.possible_moveset(chess_table) == dest, axis=1):
             raise ImpossibleMoveException(f"Cannot move this piece to pos {[dest[0], dest[1]]}.")
 
         if not isinstance(dest, np.ndarray):
-            np.array(dest, dtype=int)
+            dest = np.array(dest, dtype=int)
 
         self.__coordinates = dest
 

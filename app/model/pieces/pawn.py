@@ -13,16 +13,23 @@ class Pawn(Piece):
 
         self.__first_move = True
     
-    def _possible_moveset(self, chess_table):
+    def possible_moveset(self, chess_table):
         moves = list()
 
         def __add_move(loc: tuple, cond: any):
             if cond(loc):
                 moves.append(loc)
-        
-        if self.__first_move and self.get_coordinates()[0] == 4: # En passant
+
+        if self.__first_move: # First move
             condition = lambda x: chess_table[x[0], x[1]] == 0 and\
-                        chess_table[x[0] + 1, x[1]] == 2
+                        chess_table[x[0] + 1, x[1]] == 0
+            move = self.get_coordinates() + (-2, 0)
+            __add_move(move, condition)
+        
+        if self.get_coordinates()[0] == 4: # En passant
+            condition = lambda x: x[1] >= 0 and x[1] <= 7 and\
+                        chess_table[x[0], x[1]] == 0 and\
+                        chess_table[x[0] + 1, x[1]] == 2                        
             move = self.get_coordinates() + (-1, -1)
             __add_move(move, condition)
             move = self.get_coordinates() + (-1, 1)
@@ -34,7 +41,7 @@ class Pawn(Piece):
         __add_move(move, condition)
         
         # Capture move
-        condition = lambda x: chess_table[x[0], x[1]] == 2
+        condition = lambda x: x[1] >= 0 and x[1] <= 7 and chess_table[x[0], x[1]] == 2
         move = self.get_coordinates() + (-1, -1)
         __add_move(move, condition)
         move = self.get_coordinates() + (-1, +1)
