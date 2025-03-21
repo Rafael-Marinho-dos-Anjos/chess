@@ -14,6 +14,7 @@ class ChessTable:
     def __init__(self):
         """Chess Table class."""
         self.__pieces = list()
+        self.__last_move = None
         self.reset_table()
 
     def reset_table(self):
@@ -103,7 +104,12 @@ class ChessTable:
         
         reroll = deepcopy(self.__pieces)
         table = self.get_friends_n_enemies(player=i)
-        special_play = chosen.move(to, table)
+        if isinstance(chosen, King):
+            special_play = chosen.move(to, table, towers=self.get_towers(player))
+        elif isinstance(chosen, Pawn):
+            special_play = chosen.move(to, table, last_move=self.get_last_move())
+        else:
+            special_play = chosen.move(to, table)
 
         if special_play is None:
             pass
@@ -115,8 +121,12 @@ class ChessTable:
             self.__pieces[i][j] = Queen(coordinates=to, player=i)
 
         elif special_play == SpecialPlays.ROCK:
-            # TODO -> Rock implementation
-            pass
+            for vector in np.array([(0, 1), (0, -1)], dtype=int):
+                tower = self.get_piece_by_loc(chosen.get_coordinates() + vector, turned=player==1)
+                if isinstance(tower, Tower):
+                    break
+
+            tower.move_rock(vector * (-2))   
 
         captured = None
         for i in range(2):
@@ -138,6 +148,8 @@ class ChessTable:
         if self.is_under_xeque(player):
             self.__pieces = reroll
             raise UnderXequeException("This movement puts you under xeque.")
+
+        self.__last_move = to
 
         return captured
 
@@ -164,6 +176,18 @@ class ChessTable:
         for piece in self.__pieces[player]:
             if isinstance(piece, King):
                 return piece.get_coordinates()
+            
+    def get_towers(self, player: int) -> tuple:
+        towers = list()
+        for piece in self.__pieces[player]:
+            if isinstance(piece, Tower) and piece.isalive() and not piece.was_moved():
+                towers.append(piece.get_coordinates())
+        
+        return towers
+    
+    def get_last_move(self) -> tuple:
+        if self.__last_move:
+            return np.array([7, 7], dtype=int) - self.__last_move
             
     def is_under_xeque(self, player: int) -> bool:
         king_loc = np.array((7, 7), dtype=int) - self.get_king_loc(player)

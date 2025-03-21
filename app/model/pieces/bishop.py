@@ -52,4 +52,3 @@ class Bishop(Piece):
             return: None.
         """
         super()._move(dest, chess_table)
-        self.__first_move = False

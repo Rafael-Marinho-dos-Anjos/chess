@@ -5,6 +5,8 @@ import numpy as np
 
 from app.view.sprites import SPRITE_DIM, load_sprite
 from app.model.pieces.piece import Piece
+from app.model.pieces.king import King
+from app.model.pieces.pawn import Pawn
 from app.model.chess_table import ChessTable
 
 
@@ -69,7 +71,13 @@ def draw_board(table: ChessTable, turned: bool = False) -> np.ndarray:
 def draw_moves(table: ChessTable, board: np.ndarray, piece: Piece, turned: bool = False) -> np.ndarray:
     if isinstance(piece, Piece):
         friends_n_enemies = table.get_friends_n_enemies(piece.get_player())
-        moves = piece.possible_moveset(friends_n_enemies)
+
+        if isinstance(piece, King):
+            moves = piece.possible_moveset(friends_n_enemies, table.get_towers(piece.get_player()))
+        elif isinstance(piece, Pawn):
+            moves = piece.possible_moveset(friends_n_enemies, table.get_last_move())
+        else:
+            moves = piece.possible_moveset(friends_n_enemies)
 
         turned = turned if piece.get_player() == 0 else not turned
         piece_coordinates = piece.get_coordinates(turned)

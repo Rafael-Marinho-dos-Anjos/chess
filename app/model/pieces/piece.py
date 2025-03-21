@@ -48,14 +48,17 @@ class Piece:
         # Implement this in the subclasses
         pass
     
-    def _move(self, dest: np.ndarray, chess_table: np.ndarray) -> None:
-        if 2 not in np.sum(self.possible_moveset(chess_table) == dest, axis=1):
+    def _move(self, dest: np.ndarray, chess_table: np.ndarray, **kwargs) -> None:
+        if 2 not in np.sum(self.possible_moveset(chess_table, **kwargs) == dest, axis=1):
             raise ImpossibleMoveException(f"Cannot move this piece to pos {[dest[0], dest[1]]}.")
 
         if not isinstance(dest, np.ndarray):
             dest = np.array(dest, dtype=int)
 
         self.__coordinates = dest
+
+    def _special_move(self, to:np.ndarray) -> None:
+        self.__coordinates = to
 
     def get_player(self) -> int:
         return self.__player

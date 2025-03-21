@@ -3,6 +3,7 @@
 import cv2
 from numpy import ndarray
 
+from app.controller import MOVE_DELAY
 from app.model.chess_table import ChessTable
 from app.model.pieces.piece import Piece
 from app.view.board_view import draw_board, draw_moves, draw_warning, get_square
@@ -29,7 +30,6 @@ class Game:
         cv2.waitKey(wait)
         
     def __callback(self, *args) -> None:
-        # TODO -> Callback function
         action = args[0]
         loc = list(reversed(args[1: 3]))
         loc = get_square(loc)
@@ -67,7 +67,7 @@ class Game:
     def __move(self, loc) -> None:
         try:
             self.__table.move(self.__selected.get_coordinates(), loc, self.__turn % 2)
-            self.show(250)
+            self.show(MOVE_DELAY)
             self.__turn += 1
 
             self.__under_xeque = self.__table.is_under_xeque(self.__turn % 2)

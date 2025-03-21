@@ -9,6 +9,8 @@ class Tower(Piece):
     def __init__(self, coordinates: tuple, player: int) -> None:
         """Tower piece class"""
         super().__init__(coordinates, player)
+
+        self.__first_move = True
     
     def possible_moveset(self, chess_table):
         moves = list()
@@ -52,3 +54,10 @@ class Tower(Piece):
         """
         super()._move(dest, chess_table)
         self.__first_move = False
+
+    def move_rock(self, vector: np.ndarray) -> None:
+        self._special_move(self.get_coordinates() + vector)
+        self.__first_move = False
+
+    def was_moved(self) -> bool:
+        return not self.__first_move

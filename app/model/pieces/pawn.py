@@ -13,7 +13,7 @@ class Pawn(Piece):
 
         self.__first_move = True
     
-    def possible_moveset(self, chess_table):
+    def possible_moveset(self, chess_table, last_move: tuple = None):
         moves = list()
 
         def __add_move(loc: tuple, cond: any):
@@ -26,10 +26,11 @@ class Pawn(Piece):
             move = self.get_coordinates() + (-2, 0)
             __add_move(move, condition)
         
-        if self.get_coordinates()[0] == 3: # En passant
+        if self.get_coordinates()[0] == 3 and last_move is not None: # En passant
             condition = lambda x: x[1] >= 0 and x[1] <= 7 and\
                         chess_table[x[0], x[1]] == 0 and\
-                        chess_table[x[0] + 1, x[1]] == 2                        
+                        chess_table[x[0] + 1, x[1]] == 2 and\
+                        (x[0] + 1) == last_move[0] and x[1] == last_move[1]                
             move = self.get_coordinates() + (-1, -1)
             __add_move(move, condition)
             move = self.get_coordinates() + (-1, 1)
@@ -49,7 +50,7 @@ class Pawn(Piece):
 
         return np.array(moves, dtype=int)
     
-    def move(self, dest: tuple, chess_table: np.ndarray):
+    def move(self, dest: tuple, chess_table: np.ndarray, last_move: tuple):
         """
             Verifies if the destination is a valid movement and
             moves this piece to it if possible.
@@ -61,7 +62,7 @@ class Pawn(Piece):
         """
         init = self.get_coordinates()
 
-        super()._move(dest, chess_table)
+        super()._move(dest, chess_table, last_move=last_move)
         self.__first_move = False
 
         if abs(init[1] - dest[1]) == 1 and\
